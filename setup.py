@@ -5,7 +5,7 @@ here = pathlib.Path('README.md').parent.resolve()
 setup(
     name = 'MaxHeap',
     packages = ['MaxHeap'],
-    description='A beta version of a max-Heap that utilizes numpy memmaps so memory consumption can be reduced.',
+    description='An alpha version of a max-Heap that utilizes numpy memmaps so memory consumption can be reduced.',
     long_description=(here / 'README.md').read_text(encoding='utf-8'),
     long_description_content_type='text/markdown',
     version = '1.00',
@@ -19,7 +19,7 @@ setup(
         'numpy'
     ],
     classifiers=[
-        'Development Status :: Beta',
+        'Development Status :: 3 - Alpha',
         'Intended Audience :: Developers',
         'Topic :: Software Development :: Build Tools',
         'License :: OSI Approved :: MIT License',

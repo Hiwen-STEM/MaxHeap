@@ -1,5 +1,5 @@
-# Max - Binary Heap Implementation - Beta Version (Not Fully Optimized Yet)
-PYPI module that provides Max, Binary Heap, functionality. This is the beta version, and thus, requires more optimization, a few more tests, and possibly a few more functions that will be helpful for users. This implementation utilizes the numpy.memmap so overall memory consumption can be greatly reduced. The code will be cleaned and added to in the next several weeks...
+# Max - Binary Heap Implementation - Alpha Version (Not Fully Optimized Yet - More Features Coming)
+PYPI module that provides Max, Binary Heap, functionality. This is the alpha version, and thus, requires more optimization, a few more tests, and possibly a few more functions that will be helpful for users. This implementation utilizes the numpy.memmap so overall memory consumption can be greatly reduced. The code will be cleaned and added to in the next several weeks...
 
 #Overview
 Documentation for the Max - Binary Heap Implementation:
