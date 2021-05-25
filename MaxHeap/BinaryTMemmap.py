@@ -706,16 +706,3 @@ def upwardT(a, b, c, index, value, BT):
 
         #break from the loop if this point is reached...
         break
-    
-def main():
-
-    a = createBTT("fuck",2000)
-    a[1], a[2], a[3] = MAXBTAdd(a[0], a[1], a[2], a[3], 6)
-    a[1], a[2], a[3] = MAXBTAdd(a[0], a[1], a[2], a[3], 12)
-    print(a[0][0][0][0])
-    b, a[2], a[1] = ExtractMax(a[0], a[2], a[1])
-    b, a[2], a[1] = ExtractMax(a[0], a[2], a[1])
-    b, a[2], a[1] = ExtractMax(a[0], a[2], a[1])
-    print(b)
-
-main()
