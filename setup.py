@@ -5,10 +5,10 @@ here = pathlib.Path('README.md').parent.resolve()
 setup(
     name = 'MaxHeap',
     packages = ['MaxHeap'],
-    description='An beta version of a max-Heap that utilizes numpy memmaps so memory consumption can be reduced.',
+    description='A beta version of a max-Heap that utilizes numpy memmaps so memory consumption can be reduced.',
     long_description=(here / 'README.md').read_text(encoding='utf-8'),
     long_description_content_type='text/markdown',
-    version = '1.2',
+    version = '1.3',
     license='MIT',
     author = 'Harold J. Iwen',
     author_email = 'inventorsniche349@gmail.com',
