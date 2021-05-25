@@ -1,1 +1,1 @@
-from .BinaryTMemmap.py import *
+from .BinaryTMemmap import *

@@ -565,7 +565,7 @@ def createStructure(List, structure, columns, filename):
     if(columns != 0):
 
         #create last structure...
-        tree = np.memmap(filename+str(num), dtype='float32', mode='w+', shape=(1000,columns))
+        tree = np.memmap(filename+num, dtype='float32', mode='w+', shape=(1000,columns))
 
         #append to the list...
         List.append(tree)
