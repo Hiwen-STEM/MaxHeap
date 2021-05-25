@@ -40,6 +40,7 @@ Documentation for the Max - Binary Heap Implementation:
       +Returns the extracted max value, new max INDEX value, and LEVEL value respectively in that order.
       	      +INDEX = The max index value of the binary heap that is occupied by a value...
 	       	      +LEVEL = The number of levels the binary heap has...
+		      +BT = memmap list
 
   ## def MAXBTAdd(BT, LEVEL, INDEX, NUMNODES, value)
       +Adds a new given value to the binary heap and returns the new LEVEL, max INDEX value, and number of nodes in that order.
