@@ -33,7 +33,7 @@ Documentation for the Max - Binary Heap Implementation:
 
   ## def isFull(NUMNODES, LEVEL)
       +Returns 1 if the binary heap is a full tree, or -1 if not...
-      	  +NUMNODES = The number of occupied nodes in the binary heap...
+      +NUMNODES = The number of occupied nodes in the binary heap...
 	       	+LEVEL = The highest level of the current binary heap...
 
   ## def ExtractMax(BT, INDEX, LEVEL)
@@ -43,7 +43,7 @@ Documentation for the Max - Binary Heap Implementation:
 
   ## def MAXBTAdd(BT, LEVEL, INDEX, NUMNODES, value)
       +Adds a new given value to the binary heap and returns the new LEVEL, max INDEX value, and number of nodes in that order.
-      	 +BT = Memmap list
+      	+BT = Memmap list
 	    	+LEVEL = The number of levels the binary heap has...
 		+INDEX = The max INDEX value of the binary heap.
 		+NUMNODES = The number of nodes currently occupied within the binary heap.
