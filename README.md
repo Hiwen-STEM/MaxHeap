@@ -16,6 +16,7 @@ Documentation for the Max - Binary Heap Implementation:
      Additionally, since the heap elements are stored in files, the developer can add any elements he/she wants and continue on the next day
      by using the recalibration function to restore the information list.
 
+
 # 1. Core Functions:
 
   How to use: <br/>
@@ -60,3 +61,20 @@ Documentation for the Max - Binary Heap Implementation:
      +Adds a value to the tree and re-organizes accordingly...
      	   +INFO = information list
 	   	   +Value = The value to be added...
+
+# Example:
+
+	A = createBTO() # A is the information list
+	
+	#add a value
+	AddValue(A, 100)
+	
+	#add a value
+	AddValue(A, 2000)
+	
+	#extract a value...
+	value = ExtractMaxValue(A)
+	
+	#get max value
+	value = getMaxValue(A)
+	
