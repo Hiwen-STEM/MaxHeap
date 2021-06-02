@@ -3,49 +3,60 @@ PYPI module that provides Max, Binary Heap, functionality. This is the beta vers
 
 #Overview
 Documentation for the Max - Binary Heap Implementation:
+# 0. Preliminary Information
+
+     Upon Creating a memmap with one of the two build_heap functions, a directory that will hold the memmap files
+     will be created. After the build_heap function is finished, an information list will be returned containing
+     the following elements in order: 1. memmap list, 2. # of Levels, 3. Max Occupied Index value, 4. # of Nodes, 5. Data File reference.
+     The Developer should not mess with any of these information list elements. Should the developer accidentally tamper with the list values,
+     there is a recalibration function that will restore the information list; this assumes that the developer does not mess with the
+     files within the created directory. Should the Data file or any other file be erased, the recalibration function will no longer work,
+     and the developer should start over with creating a heap.
+
+     Additionally, since the heap elements are stored in files, the developer can add any elements he/she wants and continue on the next day
+     by using the recalibration function to restore the information list.
 
 # 1. Core Functions:
 
   How to use: <br/>
-      from MaxHeap import FUNCTION_NAME
+      from MaxHeap import FUNCTION_NAME or from MaxHeap import *
 
-  ## def createBTO(filename)
-      +Creates a memmap matrix and returns a list containing the following: [memmap list, # of Levels, Largest Index, Number of Nodes]
+  ## def createBTO()
+      +Creates a memmap matrix and returns an INFO list containing the following: [memmap list, # of Levels, Largest Index, Number of Nodes, Data File]
       	       +filename = String variable describing the file name of a numpy.memmap
 
 
-  ## def createBTT(filename, numElements)
-      +Has the same functionality as createBTO, only it allows users to input how many elements he/she wants...
+  ## def createBTT(numElements)
+     +Has the same functionality as createBTO, only this time, the developer can specify how many pre-made cells he/she wants.
 
-  ## def BreadthFS(BT, value)</br>
-      +Takes the list of memmap references and searches for a particular value given by the user.
-       The return values are three components: x, y, z that make up the index...
-       	   +BT = memmap list
-	       	   +value = The value to search for...
+  ## def getHeightThree(INFO, value)
+     +Returns the height of a certain value within the tree or -1 if it can't be found...
+     	      +INFO = information list
+	      +value = the node value that will be searched for...
 
-  ## def getHeightTwo(value, INDEX, LEVEL, BT)
-      +Takes an index value provided by the user and returns the level of the tree that the index is on.
-       If the provided index is not in the range 0 - INDEX, -1 will be returned...
-       	  +value = The value to return the height of. (returns -1 if the value can't be found)
-       	  +INDEX = The max index value of the binary heap that is occupied by a value...
-	  	  +LEVEL = The number of levels the binary heap has...
-		  +BT = memmap list
+  ## def reCalibrateInfo()
+     +This function only requires that the user be within the binary tree directory initially created; if not -1 is returned.
+     	   + No arguments required...
 
-  ## def isFull(NUMNODES, LEVEL)
-      +Returns 1 if the binary heap is a full tree, or -1 if not...
-            +NUMNODES = The number of occupied nodes in the binary heap...
-	       	+LEVEL = The highest level of the current binary heap...
+  ## def isFullTree(INFO)
+     +Returns 1 if the tree is a full tree...
+     	      +INFO = information list
 
-  ## def ExtractMax(BT, INDEX, LEVEL)
-      +Returns the extracted max value, new max INDEX value, and LEVEL value respectively in that order.
-      	      +INDEX = The max index value of the binary heap that is occupied by a value...
-	       	      +LEVEL = The number of levels the binary heap has...
-		      +BT = memmap list
+  ## def BreadthFirstOne(INFO, value)
+     +This function uses the breadth first search algorithm to find a specified node value. Three non-negative values will
+      be returned if the search is successful: x = memmap list component, y = row, z = column -> Or -1, -1, -1 if unseccussful.
+     	   +INFO = information list
+	   +value = node value to be searched for...
 
-  ## def MAXBTAdd(BT, LEVEL, INDEX, NUMNODES, value)
-      +Adds a new given value to the binary heap and returns the new LEVEL, max INDEX value, and number of nodes in that order.
-      	+BT = Memmap list
-	    	+LEVEL = The number of levels the binary heap has...
-		+INDEX = The max INDEX value of the binary heap.
-		+NUMNODES = The number of nodes currently occupied within the binary heap.
-		+value = The value to add to the binary heap.
+  ## def getMaxValue(INFO)
+     +returns the max value or -1 if no values are present.
+     	      +INFO = information list
+
+  ## def ExtractMaxValue(INFO)
+     +Retruns the max value and deletes it from the tree or returns None if no values are present.
+     	      +INFO = information list
+
+  ## def AddValue(INFO, Value)
+     +Adds a value to the tree and re-organizes accordingly...
+     	   +INFO = information list
+	   +Value = The value to be added...
