@@ -16,6 +16,18 @@
 #The numpy module contains the memmap that will be used...
 import numpy as np
 #
+#The OS package will be used to make new directories and
+#detect already existing files...
+import os
+#
+#The glob package will be used to aid in naming directories
+#correctly based on pre-existing ones...
+import glob
+#
+#Use the re package in order to order files during
+#re-calibration...
+import re
+#
 #############################################################
 
 #This section is reserved for all core functions and helper functions...
@@ -27,134 +39,61 @@ import numpy as np
 #This matrix will be capable of holding a max of 1000 binary tree
 #elements. ***NOTE: Upon adding more than 1000 elements, the matrix will
 #resize automatically.
-def createBTO(filename):
+def createBTO():
 
     #binary tree array...
     BT = []
 
     #binary tree info array...
     INFO = []
-    
-    #make sure that the filename is an authentic string
-    #type...
-    if(type(filename) == type("")):
 
-        #create a 1000x1 memmap matrix for the efficient binary tree
-        #implementation...
-        tree = np.memmap(filename, dtype='float32', mode='w+', shape=(1000,1))
+    #make the new directory for all operations...
+    Data = makeDir()
 
-        #append tree to the global BT variable...
-        BT.append(tree)
+    #create a 1000x1 memmap matrix for the efficient binary tree
+    #implementation...
+    tree = np.memmap("0", dtype='float32', mode='w+', shape=(1000,1000))
 
-        #append BT to the info array...
-        INFO.append(BT)
+    #append tree to the global BT variable...
+    BT.append(tree)
 
-        #append 0, for LEVEL 0...
-        INFO.append(0)
+    #append BT to the info array...
+    INFO.append(BT)
 
-        #append 0, for INDEX 0...
-        INFO.append(-1)
+    #append 0, for LEVEL 0...
+    INFO.append(0)
 
-        #append 0, for 0 nodes...
-        INFO.append(0)
+    #append 0, for INDEX 0...
+    INFO.append(-1)
 
-        #return INFO...
-        return INFO
+    #append 0, for 0 nodes...
+    INFO.append(0)
+
+    #append Data file reference...
+    INFO.append(Data)
+
+    #return INFO...
+    return INFO
         
-    else:
-
-        #print error message...
-        print("Sorry, but the filename you have provided is not a string...")
-
-        #return negative -1...
-        return -1
-
-#The second implementation of createBT (BT = Binary Tree) function takes
-#an argument pertaining to how many elements the user wants within his/her
-#tree; it also takes an argument for a filename...
-def createBTT(filename, numElements):
-
-    #temporary tree variable to hold a reference to memmap...
-    tree = None
-
-    #binary tree array...
-    BT = []
-
-    #binary tree info array...
-    INFO = []
-    
-    #make sure that the filename is an authentic string
-    #type...
-    if(type(filename) == type("") and type(numElements) == type(9)):
-
-        #check if num elements is less than or equal to 1000...
-        if(numElements <= 1000):
-
-            #create memmap...
-            tree =  np.memmap(filename, dtype='float32', mode='w+', shape=(1000,1))
-
-            #now append tree to BT
-            BT.append(tree)
-
-        else:
-
-            #split the input...
-            splitInput(BT, str(numElements), filename)
-
-        #append BT to the info array...
-        INFO.append(BT)
-
-        #append 0, for LEVEL 0...
-        INFO.append(0)
-
-        #append 0, for INDEX 0...
-        INFO.append(-1)
-
-        #append 0, for 0 nodes...
-        INFO.append(0)
-
-        #return INFO...
-        return INFO
-
-    else:
-
-        #print error message...
-        print("The file name was not of type string...")
-
-        #return -1...
-        return -1
 
 #Breadth first search algorithm...
-def BreadthFS(BT, value):
-
-    #Value found flag...
-    flag = 0
+def BreadthFS(BT, INDEX, value):
     
     #go through all memmap cells in a linear format...
-    for x in range(len(BT)):
+    for x in range(INDEX + 1):
 
-        #catch any out of bounds exceptions...
-        try:
+        #Decompose the index value...
+        a, b, c = Decomp(x)
+
+        #check for equivalence...
+        if(float(str(BT[int(a)][int(b)][int(c)])) == float(value)):
+
+            #return  the coordinates...
+            return int(a), int(b), int(c)
+
+    #return -1 since no match was found
+    return -1, -1, -1
         
-            #loop through all possible cells...
-            for t in range(1000):
-                for y in range(1000):
-
-                    #check the given value against the current
-                    #cell value...
-                    if(BT[x][y][t] == float(value)):
-
-                        #set the flag variable to 1...
-                        flag = 1
-                        
-                        #return 1 since the value was found...
-                        return x,y,t
-
-        
-        except:
-
-            #return -1 since no value was found...
-            return -1, -1, -1
 
 #Get the height of a particular node index...
 def getHeightOne(index, INDEX, LEVEL):
@@ -169,7 +108,7 @@ def getHeightOne(index, INDEX, LEVEL):
     #check to see if index == 0
     if(index == 0):
 
-        #return level zero
+        #return level zero...
         return 0
     
     #sum variable...
@@ -191,7 +130,7 @@ def getHeightOne(index, INDEX, LEVEL):
 def getHeightTwo(value, INDEX, LEVEL, BT):
 
     #Use Breadth first search to find the value...
-    a, b, c = BreadthFS(BT, value)
+    a, b, c = BreadthFS(BT, INDEX, value)
     
     #get the final height of the value, but first make sure
     #the value is valid...
@@ -207,34 +146,16 @@ def getHeightTwo(value, INDEX, LEVEL, BT):
         return height
 
     #return -1 if the value could not be found...
-    return -1
+    return None
 
 #Resize the memmap if more room needs to be made...
 def MResize(BT):
 
-    #first get the length of the BT list...
-    length = len(BT)
+    #since cols == 1000, we need a whole new memmap...
+    tree = np.memmap(str(len(BT)), dtype='float32', mode='w+', shape=(1000,1000))
 
-    #Now get the shape of the last memmap in the list...
-    shape = BT[length - 1].shape
-
-    #Extract the number of columns...
-    cols = shape[1]
-
-    #See if the memmap is at the max size...
-    if(cols == 1000):
-
-        #since cols == 1000, we need a whole new memmap...
-        tree = np.memmap("New_Memmap_Resize_"+str(length+1), dtype='float32', mode='w+', shape=(1000,1))
-
-        #Now append the new memmap to the BT list...
-        BT.append(tree)
-
-    else:
-
-        #since the memmap is not at full capacity, a simple resize function will be
-        #utilized...
-        BT[length - 1] = np.memmap(BT[length-1].filename, dtype='float32', mode='r+', shape=(1000,cols+1))
+    #Now append the new memmap to the BT list...
+    BT.append(tree)
     
 #Check if the binary tree is complete...
 def isFull(NUMNODES, LEVEL):
@@ -365,12 +286,6 @@ def RightChild(index):
 
 #extract the max value...
 def ExtractMax(BT, INDEX, LEVEL):
-
-    #see if INDEX == -1
-    if(INDEX == -1):
-
-        #return the same values...
-        return "NULL", INDEX, LEVEL
     
     #remove value from supernode (root)
     value = BT[0][0][0]
@@ -418,18 +333,17 @@ def ExtractMax(BT, INDEX, LEVEL):
 #add value to the MAX-Binary-Heap...
 def MAXBTAdd(BT, LEVEL, INDEX, NUMNODES, value):
 
+    #decompose the next index...
+    a, b, c = Decomp(INDEX + 1)
+    
     #see if resizing is necessary...
-    if(NUMNODES+1 > BT[len(BT)-1].shape[1]*1000):
+    if(INDEX+1 > ((len(BT)-1)*1000000 + (BT[len(BT)-1].shape[1]-1)*1000 + 999)):
 
         #resize the memmap...
         MResize(BT)
     
     #first add the value to the position
     #INDEX + 1
-
-    #decompose INDEX + 1 so it's position can
-    #be accessed...
-    a, b, c = Decomp(INDEX + 1)
 
     #starting index for upward traversal...
     index = INDEX + 1
@@ -478,7 +392,7 @@ def RightBack(index):
 
 #split the input and create binary heaps
 #based on the split input...
-def splitInput(List, numElements, filename):
+def splitInput(List, numElements):
 
     #index multiplier..
     index = len(numElements) - 3
@@ -534,14 +448,14 @@ def splitInput(List, numElements, filename):
 
         #get structure count...
         structure = int(numElements[0:length-6])
-
+        
     #Now create structures...
-    createStructure(List, structure, col, filename)
+    createStructure(List, structure, col)
 
 
 #create the number of strucutres calculated in
 #split input function...
-def createStructure(List, structure, columns, filename):
+def createStructure(List, structure, columns):
 
     #number tracker...
     num = 0
@@ -550,7 +464,7 @@ def createStructure(List, structure, columns, filename):
     for x in range(structure):
 
         #get reference...
-        tree = np.memmap(filename + str(x), dtype='float32', mode='w+', shape=(1000,1000))
+        tree = np.memmap(str(x), dtype='float32', mode='w+', shape=(1000,1000))
 
         #append to the list...
         List.append(tree)
@@ -565,7 +479,7 @@ def createStructure(List, structure, columns, filename):
     if(columns != 0):
 
         #create last structure...
-        tree = np.memmap(filename+str(num), dtype='float32', mode='w+', shape=(1000,columns))
+        tree = np.memmap(str(num), dtype='float32', mode='w+', shape=(1000,columns))
 
         #append to the list...
         List.append(tree)
@@ -584,13 +498,49 @@ def downwardT(a, b, c, value, INDEX, LEVEL, BT):
     while(True):
 
         #start traversing downwards...
-        temp = LeftChild(index)
+        temp1 = LeftChild(index)
+        temp2 = RightChild(index)
 
-        #see if the new index is valid...
-        if(temp <= INDEX):
+        #start downward traversal...
+        if(temp1 <= INDEX and temp2 <= INDEX):
+
+            #decompose index values...
+            a, b, c = Decomp(temp1)
+            t, q, p = Decomp(temp2)
+
+            #see which value is larger...
+            if(not(BT[int(t)][int(q)][int(p)] < BT[int(a)][int(b)][int(c)])):
+
+                #reassign values...
+                a, b, c = t, q, p
+
+                #assign index value
+                index = temp2
+                
+            else:
+
+                #assign index value...
+                index = temp1
+
+            #switch the values...
+            val = BT[int(x)][int(y)][int(z)]
+
+            #assign the larger value...
+            BT[int(x)][int(y)][int(z)] = BT[int(a)][int(b)][int(c)]
+
+            #assign val to BT[a][b][c]
+            BT[int(a)][int(b)][int(c)] = val
+
+            #copy the index components a,b,c
+            x, y, z = a, b, c
+
+            #continue early on...
+            continue    
+        
+        elif(temp1 <= INDEX):
 
             #decompose index value...
-            a, b, c = Decomp(temp)
+            a, b, c = Decomp(temp1)
 
             #see if new root value is in the right spot...
             if(BT[int(x)][int(y)][int(z)] < BT[int(a)][int(b)][int(c)]):
@@ -608,20 +558,15 @@ def downwardT(a, b, c, value, INDEX, LEVEL, BT):
                 x, y, z = a, b, c
 
                 #assign temp to index...
-                index = temp
+                index = temp1
 
                 #continue early on...
                 continue
 
-        #perform the same sequence of actions on the right
-        #node...
-        temp = RightChild(index)
-
-        #see if the new index is valid...
-        if(temp <= INDEX):
+        elif(temp2 <= INDEX):
 
             #decompose index value...
-            a, b, c = Decomp(temp)
+            a, b, c = Decomp(temp2)
 
             #see if new root value is in the right spot...
             if(BT[int(x)][int(y)][int(z)] < BT[int(a)][int(b)][int(c)]):
@@ -639,19 +584,19 @@ def downwardT(a, b, c, value, INDEX, LEVEL, BT):
                 x, y, z = a, b, c
 
                 #assign temp to index...
-                index = temp
+                index = temp2
 
                 #continue early on...
                 continue
 
         #return the INDEX value and MAX value...
-        return value, INDEX, LEVEL
+        return value, INDEX, LEVEL, (INDEX + 1)
 
 
 #upward traveral function...
 def upwardT(a, b, c, index, value, BT):
 
-    #x, y, z values....
+    #x, y, z checkpoint values....
     x, y, z = 0, 0 , 0
     
     #use while loop to traverse upwards...
@@ -681,8 +626,8 @@ def upwardT(a, b, c, index, value, BT):
             
             #decompose temp...
             x, y, z = Decomp(int(temp))
-            
-        #make comparison to see if upwards
+             
+        #make   comparison to see if upwards
         #traversal is necessary...
         if((flag != 1) and (BT[int(x)][int(y)][int(z)] < value)):
 
@@ -706,3 +651,217 @@ def upwardT(a, b, c, index, value, BT):
 
         #break from the loop if this point is reached...
         break
+
+#User function for adding a value...
+def AddValue(INFO,value):
+
+    #see if the INFO Structure appears legit...
+    if(Secure(INFO) == 1):
+        
+        #retrieve level, index, and num-nodes...
+        INFO[1], INFO[2], INFO[3] = MAXBTAdd(INFO[0],INFO[1],INFO[2],INFO[3],value)
+
+        #add the  new index to the Data file...
+        INFO[4][0][0] = INFO[2]
+
+#User function for extracting the max value...
+def ExtractMaxValue(INFO):
+
+    #see if the INFO structure appears legit...
+    if(Secure(INFO) == 1 and INFO[2] != -1 and INFO[3] > 0):
+        
+        #UPDATE the INFO list and retrieve the extracted value...
+        value, INFO[2], INFO[1], INFO[3] = ExtractMax(INFO[0], INFO[2], INFO[1])
+
+        #update Data index...
+        INFO[4][0][0] = INFO[2]
+
+        #return the extracted value...
+        return value
+    
+    else:
+
+        return None
+
+#User function for retrieving the max value without deletion...
+def getMaxValue(INFO):
+
+    #see if the INFO structure appears legit...
+    if(Secure(INFO) == 1 and INFO[2] != -1 and INFO[3] > 0):
+        
+        #return the max value...
+        return getMax(INFO[0])
+
+    else:
+
+        return -1
+
+
+#User friendly breadth first search function...
+def BreadthFirstOne(INFO, value):
+
+    #see if the INFO structure appears legit...
+    if(Secure(INFO) == 1 and INFO[2] != -1 and INFO[3] > 0):
+        
+        #return success or failure...
+        return BreadthFS(INFO[0], INFO[2], value)
+
+    else:
+        
+        return -1,-1,-1
+
+
+#security function...
+def Secure(INFO):
+
+    #check if index is valid...
+    if(INFO[2] < -1):
+
+        #return -1 error code...
+        return -1
+
+    elif(INFO[1] < 0):
+
+        #return -1 error code...
+        return -1
+
+    elif(INFO[3] >= 1 and (getHeightOne(INFO[2], INFO[2], INFO[1]) != INFO[1])):
+
+        #return -1 error code...
+        return -1
+
+    elif(INFO[3] >= 1 and (INFO[3] - 1 != INFO[2])):
+
+        #return -1 error code...
+        return -1
+
+    else:
+
+        #return success code...
+        return 1
+
+#User is full tree function...
+def isFullTree(INFO):
+
+    #return full tree code or not full
+    #tree code...
+    return isFull(INFO[3], INFO[1])
+    
+#re-calibrate the information list...
+def reCalibrateInfo():
+
+    #make sure that the globbed files are from a .BinaryT directory...
+    directory = os.getcwd()
+    
+    #now check for the .BinaryT extension...
+    if(not(".BinaryT" in directory)):
+
+        #return -1 error code...
+        return -1
+
+    else:
+
+        #files list...
+        L = []
+
+        #information list...
+        INFO = []
+
+        #now glob all the files...
+        for files in glob.glob("*"):
+
+            #append files to L...
+            L.append(files)
+
+        #remove Data file...
+        if("Data.Data" in L):
+            L.remove("Data.Data")
+        else:
+            return -1
+
+        #check if L is full...
+        if(len(L) == 0):
+
+            #return error code -1...
+            return -1
+
+        else:
+
+            #new file list...
+            L2 = []
+
+            #sort the list...
+            for x in range(len(L)):
+
+                #use regular expression to see if the file
+                #should be added in a certain position...
+                for y in range(len(L)):
+
+                    #sub the x segment of the file name with nothing...
+                    r = re.sub(str(x), "", L[y])
+
+                    #add file reference if a match is made...
+                    if(r == ""):
+
+                        #append memmap reference to L2...
+                        L2.append(np.memmap(L[y], dtype='float32', mode='r+', shape=(1000,1000)))
+
+                        #break out of loop...
+                        break
+                
+            #append files list to info list...
+            INFO.append(L2)
+
+            #now append INDEX, LEVEL, AND NUMNODES...
+            ref = np.memmap("Data.Data", dtype='float32', mode='r+', shape=(1,1))
+
+            #append LEVEL...
+            INFO.append(getHeightOne(int(ref[0][0]),int(ref[0][0]),10000))
+
+            #append INDEX...
+            INFO.append(int(ref[0][0]))
+
+            #append numnodes...
+            INFO.append(int(ref[0][0]) + 1)
+
+            #append data file reference...
+            INFO.append(ref)
+
+            #one final check...
+            a, b, c = Decomp(int(INFO[4][0][0]))
+
+            if(len(INFO[0])-1 != int(a)):
+
+                #return error code...
+                return -1
+
+            #return the INFO list...
+            return INFO
+            
+
+#create new directory and change to it...
+def makeDir():
+
+    #files...
+    L = []
+    
+    #glob files together...
+    for files in glob.glob("*.BinaryT"):
+
+        #append the files...
+        L.append(files)
+        
+    #make the new directory...
+    os.mkdir("Max_Heap_Tree_Files"+str(len(L)+1)+".BinaryT")
+
+    #change operations to the new directory...
+    os.chdir("Max_Heap_Tree_Files"+str(len(L)+1)+".BinaryT")
+
+    #return a reference to the new Data file...
+    return np.memmap("Data.Data", dtype='float32', mode='w+', shape=(1,1))
+
+#user function for getting the height of a certain value...
+def getHeightThree(INFO, value):
+    
+    #return the height...
+    return getHeightTwo(value, INFO[2], INFO[1], INFO[0])
