@@ -72,6 +72,9 @@ def createBTO():
     #append Data file reference...
     INFO.append(Data)
 
+    #change data value...
+    INFO[4][0][0] = -1
+
     #return INFO...
     return INFO
         
