@@ -819,7 +819,10 @@ def reCalibrateInfo():
             ref = np.memmap("Data.Data", dtype='float32', mode='r+', shape=(1,1))
 
             #append LEVEL...
-            INFO.append(getHeightOne(int(ref[0][0]),int(ref[0][0]),10000))
+            if(ref[0][0] == -1):
+                INFO.append(0)
+            else:
+                INFO.append(getHeightOne(int(ref[0][0]),int(ref[0][0]),10000))
 
             #append INDEX...
             INFO.append(int(ref[0][0]))
