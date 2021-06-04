@@ -22,7 +22,7 @@ Documentation for the Max - Binary Heap Implementation:
       from MaxHeap import FUNCTION_NAME or from MaxHeap import *
 
   ## def createBTO()
-      +Creates a memmap matrix of shape:1000 x 1000and returns an INFO list
+      +Creates a memmap matrix of shape:1000 x 1000 and returns an INFO list
        containing the following: [memmap list, # of Levels, Largest Index, Number of Nodes, Data File]
 
   ## def getHeightThree(INFO, value)
@@ -35,8 +35,12 @@ Documentation for the Max - Binary Heap Implementation:
       -1 is also returned if all of the files within are deleted...
      	   + No arguments required...
 
+  ## def isPerfect(INFO)
+     +Returns 1 if the tree is a perfect tree or -1 if not...
+     	      +INFO = information list
+
   ## def isFullTree(INFO)
-     +Returns 1 if the tree is a full tree or -1 if not...
+     +Retruns 1 if all nodes in the tree have 0 or 2 children; -1 if not...
      	      +INFO = information list
 
   ## def BreadthFirstOne(INFO, value)
@@ -95,9 +99,4 @@ Documentation for the Max - Binary Heap Implementation:
 	4. Perform the following line:
 	   A = reCalibrateInfo() # A is the information list...
 	5. Should there be any deleted files from the directory, an error code will be returned...
-	
-
-https://user-images.githubusercontent.com/52970935/120586508-45305300-c3f9-11eb-808a-32e483b224fc.mov
-
-
 	

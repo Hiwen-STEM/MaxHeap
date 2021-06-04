@@ -160,8 +160,8 @@ def MResize(BT):
     #Now append the new memmap to the BT list...
     BT.append(tree)
     
-#Check if the binary tree is complete...
-def isFull(NUMNODES, LEVEL):
+#Check if the binary tree is a perfect full tree
+def isPerfectFullTree(NUMNODES, LEVEL):
 
     #sum variable...
     sum = 0
@@ -184,6 +184,20 @@ def isFull(NUMNODES, LEVEL):
         return -1
     
 
+#check if the binary tree is a full tree...
+def isFullTree(INFO):
+
+    #see if the number of nodes is odd or not...
+    if(INFO[3] % 2 == 0 or INFO[3] == 0):
+
+        #return error code...
+        return -1
+
+    else:
+
+        return 1
+
+    
 #Decompose Index...                                                         
 def Decomp(index):
 
@@ -744,11 +758,11 @@ def Secure(INFO):
         return 1
 
 #User is full tree function...
-def isFullTree(INFO):
+def isPerfect(INFO):
 
     #return full tree code or not full
     #tree code...
-    return isFull(INFO[3], INFO[1])
+    return isPerfectFullTree(INFO[3], INFO[1])
     
 #re-calibrate the information list...
 def reCalibrateInfo():

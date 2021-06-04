@@ -6,3 +6,4 @@ from .BinaryTMemmap import BreadthFirstOne
 from .BinaryTMemmap import getMaxValue
 from .BinaryTMemmap import ExtractMaxValue
 from .BinaryTMemmap import AddValue
+from .BinaryTMemmap import isPerfect

@@ -8,7 +8,7 @@ setup(
     description='A max-Heap that utilizes numpy memmaps so memory consumption can be reduced.',
     long_description=(here / 'README.md').read_text(encoding='utf-8'),
     long_description_content_type='text/markdown',
-    version = '2.0',
+    version = '2.1',
     license='MIT',
     author = 'Harold J. Iwen',
     author_email = 'inventorsniche349@gmail.com',
