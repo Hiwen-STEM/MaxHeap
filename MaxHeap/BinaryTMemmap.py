@@ -539,20 +539,22 @@ def downwardT(a, b, c, value, INDEX, LEVEL, BT):
                 #assign index value...
                 index = temp1
 
-            #switch the values...
-            val = BT[int(x)][int(y)][int(z)]
+            if(BT[int(x)][int(y)][int(z)] < BT[int(a)][int(b)][int(c)]):
+                
+                #switch the values...
+                val = BT[int(x)][int(y)][int(z)]
 
-            #assign the larger value...
-            BT[int(x)][int(y)][int(z)] = BT[int(a)][int(b)][int(c)]
+                #assign the larger value...
+                BT[int(x)][int(y)][int(z)] = BT[int(a)][int(b)][int(c)]
 
-            #assign val to BT[a][b][c]
-            BT[int(a)][int(b)][int(c)] = val
+                #assign val to BT[a][b][c]
+                BT[int(a)][int(b)][int(c)] = val
 
-            #copy the index components a,b,c
-            x, y, z = a, b, c
+                #copy the index components a,b,c
+                x, y, z = a, b, c
 
-            #continue early on...
-            continue    
+                #continue early on...
+                continue    
         
         elif(temp1 <= INDEX):
 
