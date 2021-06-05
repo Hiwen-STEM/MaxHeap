@@ -345,7 +345,7 @@ def ExtractMax(BT, INDEX, LEVEL):
                 break
     
     #move the new root value to appropriate place...
-    return downwardT(a, b, c, value, INDEX, LEVEL, BT)
+    return downwardT(value, INDEX, LEVEL, BT)
 
 #add value to the MAX-Binary-Heap...
 def MAXBTAdd(BT, LEVEL, INDEX, NUMNODES, value):
@@ -503,13 +503,14 @@ def createStructure(List, structure, columns):
 
 
 #downwards traversal function...
-def downwardT(a, b, c, value, INDEX, LEVEL, BT):
+def downwardT(value, INDEX, LEVEL, BT):
 
     #index value...
     index = 0
 
     #index components...
     x, y, z = 0, 0, 0
+    a, b, c = 0, 0, 0
     
     #use while loop to perform downward traversal...
     while(True):
@@ -537,76 +538,41 @@ def downwardT(a, b, c, value, INDEX, LEVEL, BT):
             else:
 
                 #assign index value...
-                index = temp1
-
-            if(BT[int(x)][int(y)][int(z)] < BT[int(a)][int(b)][int(c)]):
-                
-                #switch the values...
-                val = BT[int(x)][int(y)][int(z)]
-
-                #assign the larger value...
-                BT[int(x)][int(y)][int(z)] = BT[int(a)][int(b)][int(c)]
-
-                #assign val to BT[a][b][c]
-                BT[int(a)][int(b)][int(c)] = val
-
-                #copy the index components a,b,c
-                x, y, z = a, b, c
-
-                #continue early on...
-                continue    
+                index = temp1   
         
         elif(temp1 <= INDEX):
 
             #decompose index value...
             a, b, c = Decomp(temp1)
 
-            #see if new root value is in the right spot...
-            if(BT[int(x)][int(y)][int(z)] < BT[int(a)][int(b)][int(c)]):
-
-                #switch the values...
-                val = BT[int(x)][int(y)][int(z)]
-
-                #assign the larger value...
-                BT[int(x)][int(y)][int(z)] = BT[int(a)][int(b)][int(c)]
-
-                #assign val to BT[a][b][c]
-                BT[int(a)][int(b)][int(c)] = val
-
-                #copy the index components a,b,c
-                x, y, z = a, b, c
-
-                #assign temp to index...
-                index = temp1
-
-                #continue early on...
-                continue
+            #adjust temp value
+            index = temp1
 
         elif(temp2 <= INDEX):
 
             #decompose index value...
             a, b, c = Decomp(temp2)
 
-            #see if new root value is in the right spot...
-            if(BT[int(x)][int(y)][int(z)] < BT[int(a)][int(b)][int(c)]):
+            #adjust index value..
+            index = temp2
 
-                #switch the values...
-                val = BT[int(x)][int(y)][int(z)]
+        #see if new root value is in the right spot...
+        if(BT[int(x)][int(y)][int(z)] < BT[int(a)][int(b)][int(c)]):
 
-                #assign the larger value...
-                BT[int(x)][int(y)][int(z)] = BT[int(a)][int(b)][int(c)]
+            #switch the values...
+            val = BT[int(x)][int(y)][int(z)]
 
-                #assign val to BT[a][b][c]
-                BT[int(a)][int(b)][int(c)] = val
+            #assign the larger value...
+            BT[int(x)][int(y)][int(z)] = BT[int(a)][int(b)][int(c)]
 
-                #copy the index components a,b,c
-                x, y, z = a, b, c
+            #assign val to BT[a][b][c]
+            BT[int(a)][int(b)][int(c)] = val
 
-                #assign temp to index...
-                index = temp2
+            #copy the index components a,b,c
+            x, y, z = a, b, c
 
-                #continue early on...
-                continue
+            #continue early on...
+            continue
 
         #return the INDEX value and MAX value...
         return value, INDEX, LEVEL, (INDEX + 1)
@@ -675,13 +641,21 @@ def upwardT(a, b, c, index, value, BT):
 def AddValue(INFO,value):
 
     #see if the INFO Structure appears legit...
-    if(Secure(INFO) == 1):
+    if(Secure(INFO) == 1 and (type(value) == type(9.4) or type(value) == type(2))):
         
         #retrieve level, index, and num-nodes...
         INFO[1], INFO[2], INFO[3] = MAXBTAdd(INFO[0],INFO[1],INFO[2],INFO[3],value)
 
         #add the  new index to the Data file...
         INFO[4][0][0] = INFO[2]
+
+        #return value
+        return value
+
+    else:
+
+        #return None
+        return None
 
 #User function for extracting the max value...
 def ExtractMaxValue(INFO):
@@ -713,7 +687,7 @@ def getMaxValue(INFO):
 
     else:
 
-        return -1
+        return None
 
 
 #User friendly breadth first search function...

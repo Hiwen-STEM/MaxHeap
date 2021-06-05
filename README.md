@@ -5,7 +5,7 @@ PYPI module that provides Max, Binary Heap, functionality.
 Documentation for the Max - Binary Heap Implementation:
 # 0. Preliminary Information
 
-     Upon Creating a memmap with one of the two build_heap functions, a directory that will hold the memmap files
+     Upon Creating a memmap with the build_heap function, a directory that will hold the memmap files
      will be created. After the build_heap function is finished, an information list will be returned containing
      the following elements in order: 1. memmap list, 2. # of Levels, 3. Max Occupied Index value, 4. # of Nodes, 5. Data File reference.
      The Developer should not mess with any of these information list elements. Should the developer accidentally tamper with the list values,
@@ -50,7 +50,7 @@ Documentation for the Max - Binary Heap Implementation:
 	   	   +value = node value to be searched for...
 
   ## def getMaxValue(INFO)
-     +returns the max value or -1 if no values are present.
+     +returns the max value or None if no values are present.
      	      +INFO = information list
 
   ## def ExtractMaxValue(INFO)
@@ -58,7 +58,7 @@ Documentation for the Max - Binary Heap Implementation:
      	      +INFO = information list
 
   ## def AddValue(INFO, Value)
-     +Adds a value to the tree and re-organizes accordingly...
+     +Adds a value to the tree and re-organizes accordingly; returns 'Value' if successful or None if not...
      	   +INFO = information list
 	   	   +Value = The value to be added...
 
@@ -67,14 +67,15 @@ Documentation for the Max - Binary Heap Implementation:
 	A = createBTO() # A is the information list
 
 	#add a value
-	AddValue(A, 100)
+	code = AddValue(A, 100) # code will be 100
+	code = AddValue(A, 'Bat') # code will be None ('Bat' isn't added)
 
 	#extract a value...
-	value = ExtractMaxValue(A)
+	value = ExtractMaxValue(A) # value will be 100
 
 	#add a value
-	AddValue(A, 400)
-	AddValue(A, 100.56)
+	code = AddValue(A, 400) # code will be 400
+	code = AddValue(A, 100.56) # code will be 100.56
 
 	#get max value...
 	value = getMaxValue(A)
@@ -98,5 +99,19 @@ Documentation for the Max - Binary Heap Implementation:
 	3. Traverse to the Max Heap directory of the form above...
 	4. Perform the following line:
 	   A = reCalibrateInfo() # A is the information list...
+	   Upon creating a Max-Heap for the first time, developers won't have to worry
+	   about changing to the newly created directory, as createBTO() does it for
+	   them. However, if resetting an information list after an event that involved
+	   quitting and leaving the directory, developers will have to traverse back to
+	   the directory via additional code (the os.chdir("PATH") function works well).
 	5. Should there be any deleted files from the directory, an error code will be returned...
-	
+
+
+# History:
+
+	Version 2.2: Fixed a small bug in the downward traversal function.
+
+	Version 3.0: Has getMaxValue return None if no values are present in the tree
+		     rather than -1; code in the downward traversal function has been
+		     reduced; AddValue returns None if unsuccessful or the same value
+		     that was just added if successful...
