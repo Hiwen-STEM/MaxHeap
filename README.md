@@ -1,7 +1,10 @@
 # Max - Binary Heap Implementation
 PYPI module that provides Max, Binary Heap, functionality.
 
-#Overview
+# How it Works:
+The purpose of this project is to create an efficient binary heap that re-directs the majority of what would be memory related consumption towards storage; this is done by creating a file in storage that will contain all the data. This way a reference to the storage file can be made and used to access small parts of the file in storage. The size of the storage files are kept at 1000x1000 matrice segments. Once a matrix is filled up, then another 1000x1000 matrix file will be created in storage. By doing this we can also keep the amount of storage used at a minimal amount, but this does assume that the file associated with a 1000x1000 matrix is not that big. For many it isn't considering the amount of storage most computers come with these days, but for some it could be a problem; so keep this into consideration before using. On a Mac system for instance, a 1000x1000 numpy memmap file utilizes about 4 MB of storage...
+
+# Overview
 Documentation for the Max - Binary Heap Implementation:
 # 0. Preliminary Information
 
